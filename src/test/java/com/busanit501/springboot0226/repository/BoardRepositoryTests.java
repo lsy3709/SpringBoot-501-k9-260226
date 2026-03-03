@@ -5,7 +5,12 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -54,5 +59,21 @@ public class BoardRepositoryTests {
     public void testDelete() {
         Long bno = 100L;
         boardRepository.deleteById(bno);
+    }
+
+    @Test
+    public void testPaging() {
+        // 1 페이지, 정렬 내림차순,
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        Page<Board> result = boardRepository.findAll(pageable);
+        // result 결과에는 다양한 페이징 준비물이 들어있다.
+        log.info("전체 갯수 result.getTotalElements() : " + result.getTotalElements());
+        log.info("전체 페이지 result.getTotalPages() : " + result.getTotalPages());
+        log.info("조회 페이지 번호  result.getNumber() :  " + result.getNumber());
+        log.info("조회 페이지 크기 result.getSize() :  " + result.getSize());
+
+        // 페이징 처리가 된 10개의 데이터 목록도 있음.
+        List<Board> todoList = result.getContent();
+        log.info("페이징 처리가 된 10개 데이터 확인 result.getContent() : " + todoList);
     }
 }
