@@ -49,4 +49,10 @@ public class BoardRepositoryTests {
         board.change("수정 테스트 제목", "수정 테스트 내용");
         boardRepository.save(board);
     }
+
+    @Test
+    public void testDelete() {
+        Long bno = 100L;
+        boardRepository.deleteById(bno);
+    }
 }
