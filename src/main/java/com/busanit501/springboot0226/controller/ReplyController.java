@@ -51,7 +51,8 @@ public class ReplyController {
             @Valid @RequestBody ReplyDTO replyDTO,
             BindingResult bindingResult
     ) throws BindException {
-        log.info(" ReplyController replyDTO: ", replyDTO);
+        log.info(" ReplyController replyDTO: " + replyDTO);
+//        log.info("ReplyController replyDTO 2222:===================== " + replyDTO);
         // 확인용, 더미 데이터 ,
 
         if (bindingResult.hasErrors()) {

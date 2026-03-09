@@ -6,6 +6,7 @@ import com.busanit501.springboot0226.dto.BoardDTO;
 import com.busanit501.springboot0226.dto.PageRequestDTO;
 import com.busanit501.springboot0226.dto.PageResponseDTO;
 import com.busanit501.springboot0226.dto.ReplyDTO;
+import com.busanit501.springboot0226.repository.BoardRepository;
 import com.busanit501.springboot0226.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,11 +27,21 @@ import java.util.stream.Collectors;
 public class ReplyServiceImpl implements ReplyService{
 
     private final ReplyRepository replyRepository;
+    private final BoardRepository boardRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public Long register(ReplyDTO replyDTO) {
+        log.info("ReplyServiceImpl에서, 댓글 작성중, 변환 전 댓글의 replyDTO 확인 : " + replyDTO);
         Reply reply = modelMapper.map(replyDTO, Reply.class);
+
+        // 댓글 작성시, Board 의 bno를 누락을해서, 수동으로 채우기 작업.
+        Optional<Board> result = boardRepository.findById(replyDTO.getBno());
+        Board board = result.orElseThrow();
+        reply.changeBoard(board);
+        // 댓글 작성시, Board 의 bno를 누락을해서, 수동으로 채우기 작업.
+
+        log.info("ReplyServiceImpl에서, 댓글 작성중, 변환된 댓글의 엔티티 확인 : " + reply);
         Long rno = replyRepository.save(reply).getRno();
         return rno;
     }

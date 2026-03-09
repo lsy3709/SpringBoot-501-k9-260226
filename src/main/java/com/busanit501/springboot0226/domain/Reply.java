@@ -33,4 +33,9 @@ public class Reply extends BaseEntity{
         this.replyText = text;
     }
 
+    public void changeBoard(Board board) {
+        this.board = board;
+    }
+
+
 }
